@@ -1,14 +1,18 @@
 import type { ExtensionContext, Uri } from 'vscode'
 import { commands, debug, window } from 'vscode'
 
+import { BrowserViewProvider } from './BrowserViewProvider'
 import { DebugProvider } from './DebugProvider'
 import { PanelManager } from './PanelManager'
 
 export function activate(ctx: ExtensionContext) {
   const manager = new PanelManager(ctx)
   const debugProvider = new DebugProvider(manager)
+  const browserViewProvider = new BrowserViewProvider()
 
   ctx.subscriptions.push(
+
+    window.registerTreeDataProvider('browse-lite-view', browserViewProvider),
 
     debug.registerDebugConfigurationProvider(
       'browse-lite',

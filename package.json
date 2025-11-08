@@ -30,6 +30,23 @@
     "onFileSystem:vsls"
   ],
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "browse-lite",
+          "title": "Browse Lite",
+          "icon": "resources/activity-bar-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "browse-lite": [
+        {
+          "id": "browse-lite-view",
+          "name": "Browser"
+        }
+      ]
+    },
     "commands": [
       {
         "category": "Browse Lite",
