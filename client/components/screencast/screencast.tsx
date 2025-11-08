@@ -116,15 +116,15 @@ class Screencast extends React.Component<any, any> {
     }
 
     if (event.type === 'mousedown') {
-      if (this.canvasRef.current)
-        this.canvasRef.current.focus()
+      if (this.imageRef.current)
+        this.imageRef.current.focus()
     }
   }
 
   private convertIntoScreenSpace(event: any, state: any) {
     let screenOffsetTop = 0
-    if (this.canvasRef && this.canvasRef.current)
-      screenOffsetTop = this.canvasRef.current.getBoundingClientRect().top
+    if (this.imageRef && this.imageRef.current)
+      screenOffsetTop = this.imageRef.current.getBoundingClientRect().top
 
     const { screenZoom } = this.props.viewportMetadata
     const { scrollOffsetX, scrollOffsetY } = this.props.frame.metadata
@@ -143,8 +143,8 @@ class Screencast extends React.Component<any, any> {
     if (event.key === 'Tab')
       event.preventDefault()
 
-    if (this.canvasRef.current)
-      this.canvasRef.current.focus()
+    if (this.imageRef.current)
+      this.imageRef.current.focus()
   }
 
   private modifiersForEvent(event: any) {
