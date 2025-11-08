@@ -115,6 +115,11 @@ class App extends React.Component<any, IState> {
       const isMainFrame = !frame.parentId
 
       if (isMainFrame) {
+        // Recalculate viewport dimensions before synchronizing metrics
+        // to ensure display is correct for the new page
+        if (this.viewport) {
+          this.viewport.calculateViewport()
+        }
         this.synchronizeViewportMetrics()
         this.requestNavigationHistory()
         this.updateState({
