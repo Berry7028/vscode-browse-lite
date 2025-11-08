@@ -115,6 +115,7 @@ class App extends React.Component<any, IState> {
       const isMainFrame = !frame.parentId
 
       if (isMainFrame) {
+        this.synchronizeViewportMetrics()
         this.requestNavigationHistory()
         this.updateState({
           viewportMetadata: {
@@ -232,6 +233,27 @@ class App extends React.Component<any, IState> {
     })
 
     this.nextViewportSize = undefined
+  }
+
+  private synchronizeViewportMetrics() {
+    const { viewportMetadata } = this.state
+    const { width, height } = viewportMetadata
+
+    if (width == null || height == null)
+      return
+
+    const metrics = {
+      deviceScaleFactor: window.devicePixelRatio || 1,
+      mobile: false,
+      height: Math.floor(height),
+      width: Math.floor(width),
+    }
+
+    this.connection.send('Page.setDeviceMetricsOverride', metrics)
+    this.nextViewportSize = {
+      width,
+      height,
+    }
   }
 
   public componentDidUpdate() {
