@@ -179,14 +179,48 @@ class UrlInput extends React.Component<any, IUrlInputState> {
     let url = this.state.url.trimLeft()
     const schemeRegex = /^(https?|about|chrome|file):/
 
-    if (!url.match(schemeRegex))
+    // Check if input looks like a URL
+    const isUrl = this.isValidUrl(url)
+
+    if (!isUrl) {
+      // Treat as search query - construct Google search URL
+      const searchQuery = encodeURIComponent(url)
+      url = `https://www.google.com/search?q=${searchQuery}`
+    }
+    else if (!url.match(schemeRegex)) {
+      // It's a URL but missing scheme
       url = `http://${this.state.url}`
+    }
 
     this.setState({
       hasChanged: false,
     })
 
     this.props.onUrlChanged(url)
+  }
+
+  private isValidUrl(input: string): boolean {
+    const trimmed = input.trim()
+
+    // Has a valid URL scheme
+    const schemeRegex = /^(https?|about|chrome|file):/
+    if (trimmed.match(schemeRegex))
+      return true
+
+    // Contains spaces - likely a search query
+    if (trimmed.includes(' '))
+      return false
+
+    // Looks like localhost or IP address
+    if (trimmed.match(/^(localhost|(\d{1,3}\.){3}\d{1,3})(:\d+)?(\/.*)?$/))
+      return true
+
+    // Contains a dot and looks like a domain (e.g., example.com)
+    // This covers domain names with paths, query strings, etc.
+    if (trimmed.match(/^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+(:\d+)?(\/.*)?$/))
+      return true
+
+    return false
   }
 
   private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
